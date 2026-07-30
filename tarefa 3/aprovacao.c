@@ -48,7 +48,7 @@ void mutiplicar_fator(float vetor[MAX_ALUNOS], int n, float fator) {
 
 void encontrar_finais(float notas[MAX_ALUNOS], float P[MAX_ALUNOS], float T[MAX_ALUNOS], int n){
     int i; /* índice da posição do vetor */
-    int media;
+    float media;
     for (i = 0; i < n; i++) {
         media = ((P[i]+T[i])/2);
         notas[i] = media;
@@ -63,7 +63,8 @@ void imprimir_finais(float notas[MAX_ALUNOS], int n){
 }
 
 float computar_media(float vetor[MAX_ALUNOS], int n){
-    int media, i;
+    int i;
+    float media = 0;
     for(i=0; i<n; i++){
         media = media + vetor[i];
     }
