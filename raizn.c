@@ -5,19 +5,22 @@ void soma(int S[], int R[], int i, int j, int r) {
     int s = 0;
     int indice_maior, indice_menor;
 
-    indice_maior = floor((j / r) - 1);
-    indice_menor = ceil((i / r) - 1);
+    indice_maior = floor((j / r)-1);
+    indice_menor = ceil((i / r)+1);
 
     for (int k = indice_menor; k <= indice_maior; k++) {
         s = s + R[k];
+        printf("%d\n", R[k]);
     }
 
-    for (i; i < indice_menor; i++) {
-        s = s + S[i];
+    for (int k=i; k < indice_menor*5; k++) {
+        s = s + S[k];
+        printf("S menor %d\n", S[k]);
     }
 
-    for (indice_maior++; indice_maior <= j; indice_maior++) {
-        s = s + S[indice_maior];
+    for (int k = indice_maior*5; k <= j; k++) {
+        s = s + S[k];
+        printf("S maior %d\n", S[k]);
     }
 
     printf("%d\n", s);
@@ -39,17 +42,19 @@ int main(void) {
         scanf("%d", &S[i]);
     }
 
-    int r, a;
+    int r;
 
-    r = sqrt(n);
-    a = n / r + 1;
+    r = ceil(sqrt(n));
 
-    int R[a], contador = 0, total = 0, extra = 0;
+    int R[r], contador = 0, total = 0, extra = 0;
 
     for (int i = 0; i < n; i++) {
         if (contador < r) {
             total = total + S[i];
             contador++;
+            if(i==(n-1)){
+                R[extra] = total;
+            }
         }
         else {
             R[extra] = total;
