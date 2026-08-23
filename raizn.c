@@ -1,51 +1,76 @@
-#include<stdio.h>
-#include<math.h>
+#include <stdio.h>
+#include <math.h>
 
-/*Dados os vetores R e S, os índices i e j, que indicam, 
-respectivamente, onde a soma em S começa e termina, 
-utiliza todas as somas possíveis de elementos de R e, em
- seguida, completa o que falta com os elementos 
- correspondentes de S.*/
-void soma(S, R, i, j, r){
-    int s=0;
+void soma(int S[], int R[], int i, int j, int r) {
+    int s = 0;
     int indice_maior, indice_menor;
-    indice_maior = floor((j/r)-1);
-    indice_menor = ceil((i/r)-1);
-    for(int k=indice_menor; k<=indice_maior; k++){
+
+    indice_maior = floor((j / r) - 1);
+    indice_menor = ceil((i / r) - 1);
+
+    for (int k = indice_menor; k <= indice_maior; k++) {
         s = s + R[k];
     }
-    for(i, i<indice_menor, i++){
-        s = s + S[k];
+
+    for (i; i < indice_menor; i++) {
+        s = s + S[i];
     }
-    for(indice_maior+1, indice_maior<=j, indice_maior++){
+
+    for (indice_maior++; indice_maior <= j; indice_maior++) {
         s = s + S[indice_maior];
     }
-    printf("%d", s);   
+
+    printf("%d\n", s);
 }
 
-/*Substitue um elemento em S e depois atualiza a soma
-da qual ele participava em R.*/
-void substituicao(S, R, i, x, n, r){
-    R[int(n/r)] = R[int(n/r)] - S[i] + x;
+void substituicao(int S[], int R[], int i, int x, int n, int r) {
+    R[n / r] = R[n / r] - S[i] + x;
     S[i] = x;
 }
 
-int main(void){
+int main(void) {
     int n;
+
     scanf("%d", &n);
+
     int S[n];
-    for(int i=0; i<n; i++){
+
+    for (int i = 0; i < n; i++) {
         scanf("%d", &S[i]);
     }
-    int r;
+
+    int r, a;
+
     r = sqrt(n);
-    int R[int(n/r)+1];
-    while (scanf("%s %d %d", &letra, &i, &k) != EOF) {
-        if(letra=='a'){
-            substituicao(S, R, i, k, n, r)
+    a = n / r + 1;
+
+    int R[a], contador = 0, total = 0, extra = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (contador < r) {
+            total = total + S[i];
+            contador++;
         }
-        else{
-            soma(S, R, i, j, r)   
+        else {
+            R[extra] = total;
+            extra++;
+            total = S[i];
+            contador = 1;
         }
     }
+
+    char letra;
+    int i, k;
+
+    while (scanf(" %c %d %d", &letra, &i, &k) != EOF) {
+
+        if (letra == 'a') {
+            substituicao(S, R, i, k, n, r);
+        }
+        else {
+            soma(S, R, i, k, r);
+        }
+    }
+
+    return 0;
 }
