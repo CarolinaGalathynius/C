@@ -5,22 +5,19 @@ void soma(int S[], int R[], int i, int j, int r) {
     int s = 0;
     int indice_maior, indice_menor;
 
-    indice_maior = floor((j / r)-1);
+    indice_maior = ceil((j / r))-1;
     indice_menor = ceil((i / r)+1);
 
     for (int k = indice_menor; k <= indice_maior; k++) {
         s = s + R[k];
-        printf("%d\n", R[k]);
     }
 
     for (int k=i; k < indice_menor*5; k++) {
         s = s + S[k];
-        printf("S menor %d\n", S[k]);
     }
 
-    for (int k = indice_maior*5; k <= j; k++) {
+    for (int k = (indice_maior+1)*5; k <= j; k++) {
         s = s + S[k];
-        printf("S maior %d\n", S[k]);
     }
 
     printf("%d\n", s);
@@ -28,6 +25,10 @@ void soma(int S[], int R[], int i, int j, int r) {
 
 void substituicao(int S[], int R[], int i, int x, int n, int r) {
     R[n / r] = R[n / r] - S[i] + x;
+    int a;
+    a = n/r;
+    printf("Valor de a: %d\n", a);
+    printf("Valor de R[a]: %d\n", R[a]);
     S[i] = x;
 }
 
