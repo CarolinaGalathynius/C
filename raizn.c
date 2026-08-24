@@ -24,11 +24,7 @@ void soma(int S[], int R[], int i, int j, int r) {
 }
 
 void substituicao(int S[], int R[], int i, int x, int n, int r) {
-    R[n / r] = R[n / r] - S[i] + x;
-    int a;
-    a = n/r;
-    printf("Valor de a: %d\n", a);
-    printf("Valor de R[a]: %d\n", R[a]);
+    R[i / r] = R[i / r] - S[i] + x;
     S[i] = x;
 }
 
