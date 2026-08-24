@@ -81,7 +81,7 @@ int main(void) {
     int R[tamanho], contador = 0, total = 0, extra = 0;
 
     for (int i = 0; i < n; i++) {
-        if (contador < tamanho) {
+        if (contador < r) {
             total = total + S[i];
             contador++;
             if(i==(n-1)){
