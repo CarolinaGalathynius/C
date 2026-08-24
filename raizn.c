@@ -3,23 +3,33 @@
 
 void soma(int S[], int R[], int i, int j, int r) {
     int s = 0;
+    float jota, iii, erre;
     int indice_maior, indice_menor;
+    jota = j;
+    iii = i;
+    erre = r;
 
-    indice_maior = ceil((j / r))-1;
-    indice_menor = ceil((i / r)+1);
+    indice_maior = ceil(jota / erre)-1;
+    indice_menor = floor(iii / erre)+1;
 
-    for (int k = indice_menor; k <= indice_maior; k++) {
-        s = s + R[k];
+    if(indice_maior!=indice_menor){
+        for (int k = indice_menor; k <= indice_maior; k++) {
+            s = s + R[k];
+        }
+
+        for (int k=i; k < indice_menor*5; k++) {
+            s = s + S[k];
+        }
+
+        for (int k = (indice_maior+1)*5; k <= j; k++) {
+            s = s + S[k];
+        }
     }
-
-    for (int k=i; k < indice_menor*5; k++) {
-        s = s + S[k];
+    else{
+        for(int k=i; k<=j; k++){
+            s = s + S[k];
+        }
     }
-
-    for (int k = (indice_maior+1)*5; k <= j; k++) {
-        s = s + S[k];
-    }
-
     printf("%d\n", s);
 }
 
@@ -32,6 +42,8 @@ int main(void) {
     int n;
 
     scanf("%d", &n);
+    float num;
+    num = n;
 
     int S[n];
 
@@ -40,13 +52,17 @@ int main(void) {
     }
 
     int r;
+    float rrr;
 
     r = ceil(sqrt(n));
 
-    int R[r], contador = 0, total = 0, extra = 0;
+    rrr = r;
 
+    int R[r], contador = 0, total = 0, extra = 0, treco;
+
+    treco = ceil(num/rrr);
     for (int i = 0; i < n; i++) {
-        if (contador < r) {
+        if (contador < treco) {
             total = total + S[i];
             contador++;
             if(i==(n-1)){
@@ -58,6 +74,9 @@ int main(void) {
             extra++;
             total = S[i];
             contador = 1;
+            if(i==(n-1)){
+                R[extra] = total;
+            }
         }
     }
 
