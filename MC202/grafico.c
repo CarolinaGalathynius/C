@@ -18,10 +18,10 @@ void imprimir_dados(int n[], int f[], char c[], int controle, int digitos){
         a partir de uma variável que, nesse caso, é o número de dígitos do 
         maior n.*/
         printf("%*d |", digitos, n[i]);
-        for(int k=0; i<f[controle]; i++){
-            putchar(c[controle]);
+        for(int k=0; k<f[i]; k++){
+            putchar(c[i]);
         }
-        printf(" %d\n", f[controle]);
+        printf(" %d\n", f[i]);
     }    
 }
 
@@ -41,10 +41,10 @@ int main(void){
     
     /*Descobre quantos dígitos tem o maior n*/
     int digitos;
-    digitos = descobrir_digitos
+    digitos = descobrir_digitos(max_n);
 
     /*Imprime os dados*/
-    imprimir_dados(n[], f[], c[], controle, digitos);
+    imprimir_dados(n, f, c, controle, digitos);
 
     return 0;
 }
