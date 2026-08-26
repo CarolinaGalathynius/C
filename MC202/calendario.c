@@ -14,6 +14,7 @@ int contar_horas(int A[a][], int B[b][]){
 int main(void){
     int a1, a2, a3, b1, b2, b3, c1, c2, c3, controle = 0;
     int DATA[300][3], NASCER[300][3], POR[300][3];
+    int dias_passados;
     while(scanf("%d/%d/%d %d:%d:%d %d:%d:%d", &a1, &a2, &a3, &b1, &b2, &b3, &c1, &c2, &c3)==9){
         DATA[controle][0] = a1;
         DATA[controle][1] = a2;
@@ -25,5 +26,8 @@ int main(void){
         POR[controle][1] = c2;
         POR[controle][2] = c3;   
         controle++;   
+    }
+    for(int i=0; i<=controle; i++){
+        
     }
 }
