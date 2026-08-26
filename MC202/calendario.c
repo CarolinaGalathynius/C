@@ -1,6 +1,14 @@
 /*A data muda a cada 12 horas de Sol*/
-int contar_horas(int A[], int B[]){
-
+int contar_horas(int A[a][], int B[b][]){
+    int segundos, minutos, horas, dias;
+    segundos = (A[a][2]+B[b][2]);
+    minutos = (A[a][1]+B[b][1]+(segundos/60));
+    segundos = segundos%60;
+    horas = (A[a][0]+B[b][0]+(minutos/60));
+    minutos = minutos%60;
+    dias = horas/24;
+    horas = horas%24;
+    return segundos, minutos, horas, dias;
 }
 
 int main(void){
