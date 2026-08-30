@@ -49,10 +49,10 @@ bool operador_in_vogais(char a){
 int main(void){
      int numero = 0, indice = 0, indice1 = 0, indice2 = 0;
      int indice_leitura = 0;
-     char frase[100001];
-     char novo_numero[5], nova_palavra[2500], palavra_apoio[2500];
+     char frase[300001];
+     char novo_numero[6], nova_palavra[2500], palavra_apoio[2500];
      int apoio_num = 0, apoio_palavra = 0;
-     char nova_frase[500000];
+     char nova_frase[700001];
 
      while(scanf("%c", &frase[indice_leitura]) != EOF){
 
