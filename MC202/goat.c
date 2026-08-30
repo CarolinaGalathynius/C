@@ -37,8 +37,8 @@ bool operador_in_esp(char a){
 
 /*Verifica se o caractere é uma vogal*/
 bool operador_in_vogais(char a){
-     char vogais[] = {'a', 'e', 'i', 'o', 'u'};
-     for(int i=0; i<5; i++){
+     char vogais[] = {'A', 'E', 'I', 'O', 'U', 'a', 'e', 'i', 'o', 'u'};
+     for(int i=0; i<10; i++){
           if(a==vogais[i]){
                return true;
           }
@@ -53,7 +53,16 @@ int main(void){
      int apoio_num = 0, apoio_palavra = 0;
      char nova_frase[30000];
      char frase_final[30000];
-     while(frase[indice] != '/0'){
+     indice = 0;
+
+     while (scanf("%c", &frase[indice]) == 1 &&
+          frase[indice] != '\n') {
+          indice++;
+     }
+
+     frase[indice] = '\0';
+     indice = 0;
+     while (frase[indice] != '\0'){
           if(operador_in_num(frase[indice])==true){
                while(operador_in_num(frase[indice])==true){
                     novo_numero[apoio_num] = frase[indice];
@@ -66,56 +75,95 @@ int main(void){
           else if(operador_in_esp(frase[indice])==true){
                indice++;
           }
-          else if(frase[indice]==' '){
-               nova_frase[indice1] = ' ';
-               indice1++;
-          }
-          else if(operador_in_vogais(frase[indice])==true){
-               while(frase[indice]!=' '){
-                    nova_palavra[apoio_palavra] = frase[indice];
-                    indice++;
-                    apoio_palavra++;
-               }
-               nova_palavra[apoio_palavra+1] = 'm';
-               nova_palavra[apoio_palavra+2] = 'a';
-               for(int k=1; k<=(apoio_palavra+1); k++){
-                    nova_palavra[apoio_palavra+2+k] = 'a';
-               }
-               for(int k=0; k<(2*apoio_palavra+3); k++){
-                    nova_frase[indice1] = nova_palavra[k];
+          else if(frase[indice]==' ' && frase[indice] != '\0'){
+               if(indice1>0 && nova_frase[indice1-1]!=' '){
+                    nova_frase[indice1] = ' ';
                     indice1++;
                }
+               indice++;
+          }
+          else if(operador_in_vogais(frase[indice])==true){
+               while(frase[indice]!=' ' && frase[indice] != '\0'){
+                    if(operador_in_num(frase[indice])==true){
+                         indice++;
+                    }
+                    else if(operador_in_esp(frase[indice])==true){
+                         indice++;
+                    }
+                    else{
+                         nova_palavra[apoio_palavra] = frase[indice];
+                         indice++;
+                         apoio_palavra++;
+                    }
+               }
+
+               if(apoio_palavra>0){
+                    nova_palavra[apoio_palavra] = 'm';
+                    nova_palavra[apoio_palavra+1] = 'a';
+
+                    for(int k=0; k<apoio_palavra; k++){
+                         nova_palavra[apoio_palavra+2+k] = 'a';
+                    }
+
+                    for(int k=0; k<(2*apoio_palavra+2); k++){
+                         nova_frase[indice1] = nova_palavra[k];
+                         indice1++;
+                    }
+               }
+
                apoio_palavra = 0;
           }
           else{
-               while(frase[indice]!=' '){
-                    nova_palavra[apoio_palavra] = frase[indice];
-                    indice++;
-                    apoio_palavra++;
+               while(frase[indice]!=' ' && frase[indice] != '\0'){
+                    if(operador_in_num(frase[indice])==true){
+                         indice++;
+                    }
+                    else if(operador_in_esp(frase[indice])==true){
+                         indice++;
+                    }
+                    else{
+                         nova_palavra[apoio_palavra] = frase[indice];
+                         indice++;
+                         apoio_palavra++;
+                    }
                }
-               for(int k=-1; k<(apoio_palavra-1); k++){
-                    palavra_apoio[k+1] = nova_palavra[k];
+
+               if(apoio_palavra>0){
+                    for(int k = 1; k < apoio_palavra; k++){
+                         palavra_apoio[k - 1] = nova_palavra[k];
+                    }
+
+                    palavra_apoio[apoio_palavra - 1] = nova_palavra[0];
+                    palavra_apoio[apoio_palavra] = 'm';
+                    palavra_apoio[apoio_palavra+1] = 'a';
+
+                    for(int k=0; k<apoio_palavra; k++){
+                         palavra_apoio[apoio_palavra+2+k] = 'a';
+                    }
+
+                    for(int k=0; k<(2*apoio_palavra+2); k++){
+                         nova_frase[indice1] = palavra_apoio[k];
+                         indice1++;
+                    }
                }
-               for(int k=1; k<=apoio_palavra; k++){
-                    palavra_apoio[apoio_palavra+k] = 'a';
-               }
-               for(int k=0; k<(2*apoio_palavra+1); k++){
-                    nova_frase[indice1] = palavra_apoio[k];
-                    indice1++;
-               } 
+
                apoio_palavra = 0;    
           }
      }
-     indice1++;
-     nova_frase[indice1] = '/0';
-     if(numero!=1){
-          printf("%d goat say: ", numero);
+
+     nova_frase[indice1] = '\0';
+
+     if(numero==1){
+          printf("%d goat says: ", numero);
      }
      else{
           printf("%d goats say: ", numero);
      }
-     while(nova_frase[indice2]!='/0'){
+
+     while(nova_frase[indice2]!='\0'){
           printf("%c", nova_frase[indice2]);
           indice2++;
      }
+
+     printf("\n");
 }
