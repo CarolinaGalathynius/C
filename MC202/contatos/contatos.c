@@ -30,5 +30,31 @@ void impressao(){
 }
 
 void main(){
+    Contato contatos[1000];
+    char nome[50], endereco[100], telefone[15], aniversario[8], operacao;
+    int i = 0;
 
+    while(scanf("%c", &operacao)!=EOF){
+        if(operacao == 'i'){
+            scanf("%s", nome);
+            scanf("%s", endereco);
+            scanf("%s", telefone);
+            scanf("%s", aniversario);
+            inserir(nome, endereco, telefone, aniversario, contatos);
+        }
+        else if(operacao == 'r'){
+            scanf("%s", nome);
+            remover(nome);
+        }
+        else if(operacao == 'b'){
+            scanf("%s", nome);
+            busca(nome);
+        }
+        else if(operacao == 'p'){
+            impressao();
+        }
+        else if(operacao == 'f'){
+            break;
+        }
+    }
 }
