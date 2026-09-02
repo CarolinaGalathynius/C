@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
 /*Cria um vetor chamado "contatos"
 no qual cada elemento é contém
 o nome, o endereco, o telefone e o
@@ -10,29 +14,52 @@ typedef struct{
 } Contato;
 
 // Função para inserir um novo contato no vetor
-void inserir(char nome[50], char endereco[100], char telefone[15], char aniversario[8], Contato contatos[1000]){
-
+void inserir(char nome[50], char endereco[100], char telefone[15], char aniversario[8], Contato contatos[1000], int tamanho){
+    strcpy(contatos[tamanho].nome, nome);
+    strcpy(contatos[tamanho].endereco, endereco);
+    strcpy(contatos[tamanho].telefone, telefone);
+    strcpy(contatos[tamanho].aniversario, aniversario);
+    printf("Contato para %s inserido.", nome);
 }
 
 // Função para remover contatos no vetor
-void remover(char nome[50]){
+void remover(char nome[50], int tamanho, Contato contatos[1000]){
+    for(int i = 0; i < tamanho; i++){
+        if(strcmp(contatos[i].nome, nome) == 0){
+            for(int j = i; j < tamanho - 1; j++){
+                contatos[j] = contatos[j + 1];
+        }
+    }
+}
 
+// Verifica se o caractere procurado está contido no nome do contato
+bool operador_in(char procurado, char nome[50]){
+    for(int i = 0; i < strlen(nome); i++){
+        if(procurado == nome[i]){
+            return true;
+        }
+    }
+    return false;
 }
 
 // Função para buscar contatos no vetor
-void busca(char nome[50]){
+void busca(char nome[50], int tamanho, Contato contatos[1000]){
 
 }
 
 // Imprime todos os contatos do vetor
-void impressao(){
-
+void impressao(int tamanho, Contato contatos[1000]){
+    int numero;
+    for(int i =0; i < tamanho; i++){
+        numero = i + 1;
+        printf("(%d) %s %s %s %s\n", numero, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].aniversario);
+    }
 }
 
 void main(){
     Contato contatos[1000];
     char nome[50], endereco[100], telefone[15], aniversario[8], operacao;
-    int i = 0;
+    int i = 0; 
 
     while(scanf("%c", &operacao)!=EOF){
         if(operacao == 'i'){
@@ -40,18 +67,19 @@ void main(){
             scanf("%s", endereco);
             scanf("%s", telefone);
             scanf("%s", aniversario);
-            inserir(nome, endereco, telefone, aniversario, contatos);
+            inserir(nome, endereco, telefone, aniversario, contatos, i);
+            i++;
         }
         else if(operacao == 'r'){
             scanf("%s", nome);
-            remover(nome);
+            remover(nome, i, contatos);
         }
         else if(operacao == 'b'){
             scanf("%s", nome);
-            busca(nome);
+            busca(nome, i, contatos);
         }
         else if(operacao == 'p'){
-            impressao();
+            impressao(i, contatos);
         }
         else if(operacao == 'f'){
             break;
