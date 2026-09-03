@@ -1,14 +1,15 @@
+Inserido (1) 	Rua A, 1 - Centro	11212134512	31/11/31
+
 Contato para  inserido.
+
+Inserido (2) 	Rua B, 2 - Centro	11212134512	01/01/50
 
 Contato para  inserido.
 
 Listagem:
-(1) 	Fulano	Rua A, 1 - Cen	tro
+(1) 	Rua A, 1 - Centro	11212134512	31/11/31
 
-(2) 	Fulana	Rua B, 2 - Cen	tro
-
-Resultado da busca:
-Nenhum contato.
+(2) 	Rua B, 2 - Centro	11212134512	01/01/50
 
 Resultado da busca:
 Nenhum contato.
@@ -19,14 +20,14 @@ Nenhum contato.
 Resultado da busca:
 Nenhum contato.
 
-Contatos de  removidos: 1.
+Contatos de Fulano removidos: 0.
 
 Listagem:
-(1) 	Fulana	Rua B, 2 - Cen	tro
+(1) 	Rua A, 1 - Centro	11212134512	31/11/31
 
-(2) 	Fulana	Rua B, 2 - Cen	tro
+(2) 	Rua B, 2 - Centro	11212134512	01/01/50
 
-Contatos de  removidos: 1.
+Contatos de Fulano removidos: 0.
 
 Resultado da busca:
 Nenhum contato.

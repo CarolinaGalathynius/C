@@ -9,16 +9,17 @@ aniversario de alguém.*/
 typedef struct{
     char nome[50];
     char endereco[100];
-    char telefone[15];
+    long long telefone;
     char aniversario[8];
 } Contato;
 
 // Função para inserir um novo contato no vetor
-void inserir(char nome[50], char endereco[100], char telefone[15], char aniversario[8], Contato contatos[1000], int tamanho){
+void inserir(char nome[50], char endereco[100], long long telefone, char aniversario[8], Contato contatos[1000], int tamanho){
     strcpy(contatos[tamanho].nome, nome);
     strcpy(contatos[tamanho].endereco, endereco);
-    strcpy(contatos[tamanho].telefone, telefone);
+    contatos[tamanho].telefone = telefone;
     strcpy(contatos[tamanho].aniversario, aniversario);
+    printf("Inserido (%d) %s\t%s\t%lld\t%s\n\n", tamanho+1, contatos[tamanho].nome, contatos[tamanho].endereco, contatos[tamanho].telefone, contatos[tamanho].aniversario);
     printf("Contato para %s inserido.\n\n", nome);
 }
 
@@ -56,7 +57,7 @@ void busca(char nome[50], int tamanho, Contato contatos[1000]){
     for(int i = 0; i < tamanho; i++){
         numero = i + 1;
         if(operador_in(nome[0], contatos[i].nome)){
-            printf("(%d) %s\t%s\t%s\t%s\n\n", numero, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].aniversario);
+            printf("(%d) %s\t%s\t%lld\t%s\n\n", numero, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].aniversario);
             encontrado = true;
         }
     }
@@ -71,35 +72,31 @@ void impressao(int tamanho, Contato contatos[1000]){
     printf("Listagem:\n");
     for(int i =0; i < tamanho; i++){
         numero = i + 1;
-        printf("(%d) %s\t%s\t%s\t%s\n\n", numero, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].aniversario);
+        printf("(%d) %s\t%s\t%lld\t%s\n\n", numero, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].aniversario);
     }
 }
 
 int main(void){
     Contato contatos[1000];
-    char nome[50], endereco[100], telefone[15], aniversario[8], operacao;
+    char nome[50], endereco[100], aniversario[8], operacao;
+    long long telefone;
     int i = 0; 
 
     while(scanf(" %c", &operacao) == 1){
         if(operacao == 'i'){
-            fgets(nome, sizeof(nome), stdin);
-            fgets(endereco, sizeof(endereco), stdin);
-            fgets(telefone, sizeof(telefone), stdin);
-            fgets(aniversario, sizeof(aniversario), stdin);
-            nome[strcspn(nome, "\n")] = '\0';
-            endereco[strcspn(endereco, "\n")] = '\0';
-            telefone[strcspn(telefone, "\n")] = '\0';
-            aniversario[strcspn(aniversario, "\n")] = '\0';
+            scanf(" %[^\n]", nome);
+            scanf(" %[^\n]", endereco);
+            scanf(" %lld", &telefone); 
+            scanf(" %[^\n]", aniversario);
             inserir(nome, endereco, telefone, aniversario, contatos, i);
             i++;
         }
         else if(operacao == 'r'){
-            fgets(nome, sizeof(nome), stdin);
-            nome[strcspn(nome, "\n")] = '\0';
+            scanf(" %[^\n]", nome);
             remover(nome, i, contatos);
         }
         else if(operacao == 'b'){
-            fgets(nome, sizeof(nome), stdin);
+            scanf(" %[^\n]", nome);
             nome[strcspn(nome, "\n")] = '\0';
             busca(nome, i, contatos);
         }
