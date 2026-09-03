@@ -24,13 +24,14 @@ void inserir(char nome[51], char endereco[101], long long telefone, char anivers
 // Função para remover contatos no vetor
 int remover(char nome[51], int tamanho, Contato contatos[1001]){
     int contador = 0;
-    for(int i = 0; i < tamanho; i++){
-        if(strcmp(contatos[i].nome, nome) == 0){
+    int i = 0;
+    for(int k=0; k < tamanho; k++){
+        if(strcmp(contatos[k].nome, nome) == 0){
             contador++;
-            for(int j = i; j < tamanho - 1; j++){
-                contatos[j] = contatos[j + 1];
-            }
-            break;
+        }
+        else{
+            contatos[i] = contatos[k];
+            i++;
         }
     }
     printf("Contatos de %s removidos: %d.\n\n", nome, contador);
