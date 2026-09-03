@@ -2,29 +2,27 @@
 #include <string.h>
 #include <stdbool.h>
 
-/*Cria um vetor chamado "contatos"
-no qual cada elemento é contém
-o nome, o endereco, o telefone e o
+/*Cria uma struct chamadad "Contato" que 
+armazena nome, endereco, telefone e
 aniversario de alguém.*/
 typedef struct{
-    char nome[50];
-    char endereco[100];
+    char nome[51];
+    char endereco[101];
     long long telefone;
-    char aniversario[8];
+    char aniversario[9];
 } Contato;
 
 // Função para inserir um novo contato no vetor
-void inserir(char nome[50], char endereco[100], long long telefone, char aniversario[8], Contato contatos[1000], int tamanho){
+void inserir(char nome[51], char endereco[101], long long telefone, char aniversario[9], Contato contatos[1001], int tamanho){
     strcpy(contatos[tamanho].nome, nome);
     strcpy(contatos[tamanho].endereco, endereco);
     contatos[tamanho].telefone = telefone;
     strcpy(contatos[tamanho].aniversario, aniversario);
-    printf("Inserido (%d) %s\t%s\t%lld\t%s\n\n", tamanho+1, contatos[tamanho].nome, contatos[tamanho].endereco, contatos[tamanho].telefone, contatos[tamanho].aniversario);
     printf("Contato para %s inserido.\n\n", nome);
 }
 
 // Função para remover contatos no vetor
-void remover(char nome[50], int tamanho, Contato contatos[1000]){
+int remover(char nome[51], int tamanho, Contato contatos[1001]){
     int contador = 0;
     for(int i = 0; i < tamanho; i++){
         if(strcmp(contatos[i].nome, nome) == 0){
@@ -36,27 +34,17 @@ void remover(char nome[50], int tamanho, Contato contatos[1000]){
         }
     }
     printf("Contatos de %s removidos: %d.\n\n", nome, contador);
-    tamanho -= contador;
-}
-
-// Verifica se o caractere procurado está contido no nome do contato
-bool operador_in(char procurado, char nome[50]){
-    for(int i = 0; i < strlen(nome); i++){
-        if(procurado == nome[i]){
-            return true;
-        }
-    }
-    return false;
+    return contador;
 }
 
 // Função para buscar contatos no vetor
-void busca(char nome[50], int tamanho, Contato contatos[1000]){
+void busca(char nome[51], int tamanho, Contato contatos[1001]){
     printf("Resultado da busca:\n");
     bool encontrado = false;
     int numero;
     for(int i = 0; i < tamanho; i++){
         numero = i + 1;
-        if(operador_in(nome[0], contatos[i].nome)){
+        if(strstr(contatos[i].nome, nome) != NULL){
             printf("(%d) %s\t%s\t%lld\t%s\n\n", numero, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].aniversario);
             encontrado = true;
         }
@@ -67,7 +55,7 @@ void busca(char nome[50], int tamanho, Contato contatos[1000]){
 }
 
 // Imprime todos os contatos do vetor
-void impressao(int tamanho, Contato contatos[1000]){
+void impressao(int tamanho, Contato contatos[1001]){
     int numero;
     printf("Listagem:\n");
     for(int i =0; i < tamanho; i++){
@@ -77,27 +65,28 @@ void impressao(int tamanho, Contato contatos[1000]){
 }
 
 int main(void){
-    Contato contatos[1000];
-    char nome[50], endereco[100], aniversario[8], operacao;
+    Contato contatos[1001];
+    char nome[51], endereco[101], aniversario[9], operacao;
     long long telefone;
     int i = 0; 
+    int excluidos = 0;
 
     while(scanf(" %c", &operacao) == 1){
         if(operacao == 'i'){
-            scanf(" %[^\n]", nome);
-            scanf(" %[^\n]", endereco);
+            scanf(" %50[^\n]", nome);
+            scanf(" %100[^\n]", endereco);
             scanf(" %lld", &telefone); 
-            scanf(" %[^\n]", aniversario);
+            scanf(" %8[^\n]", aniversario);
             inserir(nome, endereco, telefone, aniversario, contatos, i);
             i++;
         }
         else if(operacao == 'r'){
-            scanf(" %[^\n]", nome);
-            remover(nome, i, contatos);
+            scanf(" %50[^\n]", nome);
+            excluidos = remover(nome, i, contatos);
+            i -= excluidos;
         }
         else if(operacao == 'b'){
-            scanf(" %[^\n]", nome);
-            nome[strcspn(nome, "\n")] = '\0';
+            scanf(" %50[^\n]", nome);
             busca(nome, i, contatos);
         }
         else if(operacao == 'p'){
