@@ -35,6 +35,7 @@ void remover(char nome[50], int tamanho, Contato contatos[1000]){
         }
     }
     printf("Contatos de %s removidos: %d.\n\n", nome, contador);
+    tamanho -= contador;
 }
 
 // Verifica se o caractere procurado está contido no nome do contato
@@ -79,21 +80,27 @@ int main(void){
     char nome[50], endereco[100], telefone[15], aniversario[8], operacao;
     int i = 0; 
 
-    while(scanf("%c", &operacao)!=EOF){
+    while(scanf(" %c", &operacao) == 1){
         if(operacao == 'i'){
-            scanf("%s", nome);
-            scanf("%s", endereco);
-            scanf("%s", telefone);
-            scanf("%s", aniversario);
+            fgets(nome, sizeof(nome), stdin);
+            fgets(endereco, sizeof(endereco), stdin);
+            fgets(telefone, sizeof(telefone), stdin);
+            fgets(aniversario, sizeof(aniversario), stdin);
+            nome[strcspn(nome, "\n")] = '\0';
+            endereco[strcspn(endereco, "\n")] = '\0';
+            telefone[strcspn(telefone, "\n")] = '\0';
+            aniversario[strcspn(aniversario, "\n")] = '\0';
             inserir(nome, endereco, telefone, aniversario, contatos, i);
             i++;
         }
         else if(operacao == 'r'){
-            scanf("%s", nome);
+            fgets(nome, sizeof(nome), stdin);
+            nome[strcspn(nome, "\n")] = '\0';
             remover(nome, i, contatos);
         }
         else if(operacao == 'b'){
-            scanf("%s", nome);
+            fgets(nome, sizeof(nome), stdin);
+            nome[strcspn(nome, "\n")] = '\0';
             busca(nome, i, contatos);
         }
         else if(operacao == 'p'){
