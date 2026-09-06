@@ -61,7 +61,7 @@ void impressao(int tamanho, Contato contatos[1001]){
     printf("Listagem:\n");
     for(int i =0; i < tamanho; i++){
         numero = i + 1;
-        printf("(%d) %s\t%s\t%lld\t%s\n\n", numero, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].aniversario);
+        printf("(%d) %s\t%s\t%lld\t%s\n", numero, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].aniversario);
     }
 }
 
