@@ -1,26 +1,22 @@
 #include<stdio.h>
 #include<stdbool.h>
+#include<stdlib.h>
 
-int ordenar_linhas(int k, int M[k][3]){
-    int a, b, c;
+int comparar(const void *a, const void *b){
+    int *A = (int *)a;
+    int *B = (int *)b;
+    if(A[0] != B[0]){
+        return A[0] - B[0];
+    } else {
+        return A[1] - B[1];
+    }
+}
+
+int encontrar_maior(int k, int M[k][3]){
     int maior = 0;
-
-    for(int i = 0; i < k - 1; i++){
-        for(int j = 0; j < k - 1 - i; j++){
-            if(maior < M[j][0]){
-                maior = M[j][0];
-            }
-            if(M[j][0] > M[j+1][0] || (M[j][0] == M[j+1][0] && M[j][1] > M[j+1][1])){
-                a = M[j][0];
-                b = M[j][1];
-                c = M[j][2];
-                M[j][0] = M[j+1][0];
-                M[j][1] = M[j+1][1];
-                M[j][2] = M[j+1][2];
-                M[j+1][0] = a;
-                M[j+1][1] = b;
-                M[j+1][2] = c;
-            }
+    for(int i = 0; i < k; i++){
+        if(M[i][0] > maior){
+            maior = M[i][0];
         }
     }
     return maior;
@@ -61,20 +57,29 @@ int main(void){
     int k;
     scanf("%d", &k); // Número de elementos não-zero
 
-    int M[k][3];
+    int (*M)[3] = malloc(k * sizeof(*M)); 
+    if(M == NULL) {
+        return 1;
+    }
     for(int i=0; i<k; i++){
         for(int w=0; w<3; w++){
             scanf("%d", &M[i][w]);
         }
     }
 
-    int A[k], C[k], R[10000];
-
-    int maior = ordenar_linhas(k, M);
+    qsort(M, k, sizeof(M[0]), comparar);
+    int maior = encontrar_maior(k, M);
+    int *R = malloc((maior + 2) * sizeof(int));
+    int *A = malloc(k * sizeof(int));
+    int *C = malloc(k * sizeof(int));
 
     montar_A(A, k, M);
     montar_C(C, k, M);
     montar_R(R, k, M, maior);
+    if(R == NULL || A == NULL || C == NULL){
+        free(M);
+        return 1;
+    }
 
     int i, j;
     scanf("%d %d", &i, &j);
@@ -82,7 +87,7 @@ int main(void){
 
     while(j != -1 && i != -1){
         encontrou = false;
-        if(R[i] == R[i+1]){
+        if(i>maior || R[i] == R[i+1]){
             imprimir_saida(i, j, 0);
             encontrou = true;
         } else {
@@ -97,5 +102,9 @@ int main(void){
         }
         scanf("%d %d", &i, &j);
     }
+    free(R);
+    free(A);
+    free(C);
+    free(M);
     return 0;
 }
