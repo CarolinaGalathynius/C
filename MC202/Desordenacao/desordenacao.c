@@ -9,7 +9,14 @@ int ordenar_vetor(const void *a, const void *b){
 }
 
 void trocar_linhas(int V[], int k, int j, char **cadeias, int i1, int i2){
-    // A posição i1 inverte com a i2 em ambos os vetores V e cadeias
+    char *apoio_c;
+    apoio_c = cadeias[i1];
+    cadeias[i1] = cadeias[i2];
+    cadeias[i2] = apoio_c;
+    int apoio_v;
+    apoio_v = V[i1];
+    V[i1] = V[i2];
+    V[i2] = apoio_v;
 }
 
 int main(void){
@@ -19,11 +26,14 @@ int main(void){
     for(int i=0; i<c; i++){
         getchar(); 
         scanf("%d %d", &k, &j);
+        char **cadeias;
         cadeias = (char **)malloc(k * sizeof(char *));
-        //Terminar de alocar memória para cada cadeia de caracteres
+        for(int i=0; i<k; i++){
+            cadeias[i] = (char *)malloc(j * sizeof(char));
+        }
+        for(int i=0; i<k; i++){
+            free(cadeias[i]);
+        }
+        free(cadeias);
     }
-    for(int i=0; i<k; i++){
-        free(cadeias[i]);
-    }
-    free(cadeias);
 }
