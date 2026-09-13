@@ -7,10 +7,6 @@ def medir_desordenacao(cadeia):
                 desordenacao += 1
     return desordenacao 
 
-def ordenar(cadeia):
-    cadeia_ordenada = sorted(cadeia)
-    return cadeia_ordenada
-
 def main():
     c = int(input())
     for i in range(c):
