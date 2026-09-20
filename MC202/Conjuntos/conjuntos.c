@@ -17,6 +17,13 @@ struct conjunto{
 
 typedef conjunto conjunto;
 
+void criar_conjunto_vazio(int i, conjunto** p){
+    conjunto* novo = malloc(sizeof(conjunto));
+    novo -> nome = i;
+    novo->prox = *p;
+    *p = novo;
+}
+
 void encontrar_nome(char V[], int x){
     V[0] = 'C';
     sprintf(&V[1], "%d", x);
@@ -51,13 +58,6 @@ void atribuir_diferenca(){
 }
 
 void imprimir_esta(conjunto* L1, int num, int x){
-    /*
-    no pega(no* L1, long i) {
-        for (long j=0; j<i; j++)
-            L1 = L1->prox;
-        return *L1;
-    }
-    */
     conjunto* p = L1;
     int nome_c;
     bool encontrado = false;
@@ -66,9 +66,9 @@ void imprimir_esta(conjunto* L1, int num, int x){
         nome_c = p->nome;
         if(num == nome_c){
             // Encontramos o conjunto! Agora é verificar se x está dentro dele
-            encontrado = in_lista_encadeada();
-
-        } else{
+            encontrado = in_lista_encadeada(p, x);
+            break;
+        } else {
             p = p->prox;
         }
     }
@@ -76,15 +76,31 @@ void imprimir_esta(conjunto* L1, int num, int x){
         printf("%d nao esta em ", x);
         encontrar_nome(nome, num);
         printf("%s\n", nome);
+    } else {
+        printf("%d esta em ", x);
+        encontrar_nome(nome, num);
+        printf("%s\n", nome);       
     }
 }
 
-bool in_lista_encadeada(conjunto *L1, ){
-
+bool in_lista_encadeada(conjunto *L1, int number){
+    // AQUI POSSO TER UM PROBLEMA
+    // NÃO SEI SE ESTOU ACESSANDO CORRETAMENTE A LISTA ENCADEADA DE NÚMEROS DO CONJUNTO
+    int num;
+    num = L1 -> numero -> numero;
+    numeros* apoio = L1 -> numero -> next;
+    while(num != NULL){
+        if(num == number){
+            return true;
+        }
+        apoio = apoio -> next;
+        num = apoio -> numero;
+    }
+    return false;
 }
 
 void imprimir_conjunto(){
-    
+    char nome[5];
 }
 
 int main(void){
@@ -94,8 +110,7 @@ int main(void){
         if(caractere == 'c'){
 
         } else if(caractere == 'i'){
-            // Cria o conjunto vazio i
-
+            
         } else if(caractere == 'r'){
             // Remove elementos do conjunto j
             
