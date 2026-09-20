@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
 
 struct numeros{
     int numero;
@@ -15,6 +16,11 @@ struct conjunto{
 };
 
 typedef conjunto conjunto;
+
+void encontrar_nome(char V[], int x){
+    V[0] = 'C';
+    sprintf(&V[1], "%d", x);
+}
 
 void remover_elementos(){
 
@@ -37,15 +43,44 @@ void atribuir_intersecao(){
 }
 
 void computar_diferenca(){
-    
+
 }
 
 void atribuir_diferenca(){
     
 }
 
-void imprimir_esta(){
-    
+void imprimir_esta(conjunto* L1, int num, int x){
+    /*
+    no pega(no* L1, long i) {
+        for (long j=0; j<i; j++)
+            L1 = L1->prox;
+        return *L1;
+    }
+    */
+    conjunto* p = L1;
+    int nome_c;
+    bool encontrado = false;
+    char nome[5];
+    while(p != NULL){
+        nome_c = p->nome;
+        if(num == nome_c){
+            // Encontramos o conjunto! Agora é verificar se x está dentro dele
+            encontrado = in_lista_encadeada();
+
+        } else{
+            p = p->prox;
+        }
+    }
+    if(encontrado == false){
+        printf("%d nao esta em ", x);
+        encontrar_nome(nome, num);
+        printf("%s\n", nome);
+    }
+}
+
+bool in_lista_encadeada(conjunto *L1, ){
+
 }
 
 void imprimir_conjunto(){
