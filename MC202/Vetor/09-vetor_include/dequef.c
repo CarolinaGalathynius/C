@@ -16,14 +16,20 @@
    On failure it returns NULL.
 **/
 dequef* df_alloc(long capacity, double factor) {
+   dequef* D;
+   D -> cap = capacity;
+   D -> mincap = capacity;
+   D -> factor = factor;
+   return D;
 }
 
 
 
 /**
-  Release a dequef and its data.
+Release a dequef and its data.
 **/
 void df_free(dequef* D) {
+   free(D);
 }
 
 
@@ -32,6 +38,7 @@ void df_free(dequef* D) {
    The size of the deque.
 **/
 long df_size(dequef* D) {
+   return (D->size);
 }
 
 
