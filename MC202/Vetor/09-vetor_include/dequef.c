@@ -16,7 +16,7 @@
    On failure it returns NULL.
 **/
 dequef* df_alloc(long capacity, double factor) {
-   dequef* D;
+   dequef* D = (dequef*)malloc(sizeof(dequef));
    D -> cap = capacity;
    D -> mincap = capacity;
    D -> factor = factor;
