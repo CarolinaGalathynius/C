@@ -20,10 +20,8 @@ typedef struct dicionario{
 dicionario* df_alloc(palavra, frequencia);
 void df_free(dicionario* D);
 
-long df_frequencia(dicionario* D);
-
 int df_search(dicionario* D, char x[1000]);
-void autocomplete(dicionario* D, char x[1000], long k);
+void df_autocomplete(dicionario* D, char x[1000], long k);
 
 int df_insert(dicionario* D, char x[1000], long f);
 int df_delete(dicionario* D, char x[1000]);
