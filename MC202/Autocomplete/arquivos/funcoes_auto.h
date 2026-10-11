@@ -16,11 +16,11 @@ typedef struct dicionario{
 
 void df_free(dicionario* D);
 
-int df_search(dicionario* D, char x[1000]);
-int df_autocomplete(dicionario* D, char x[1000], long k);
+int df_search(dicionario* D, char x[10000]);
+int df_autocomplete(dicionario* D, char x[10000], long k);
 
-int df_insert(dicionario** head, char x[1000], long f);
-int df_delete(dicionario** head, char x[1000]);
+int df_insert(dicionario** head, char x[10000], long f);
+int df_delete(dicionario** head, char x[10000]);
 
 void df_print(dicionario* D, int k);
 

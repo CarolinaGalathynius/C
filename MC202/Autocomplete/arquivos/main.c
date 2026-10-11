@@ -8,7 +8,7 @@
 
 int main(void) {
 
-  char cmd[13], x[1000];
+  char cmd[13], x[10000];
   long f;
   int i, k;
   dicionario* head = NULL;

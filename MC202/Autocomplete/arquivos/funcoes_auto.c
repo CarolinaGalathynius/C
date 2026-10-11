@@ -29,7 +29,7 @@ void df_free(dicionario* D){
 /**
     Adiciona a palavra w com frequência f a sua devida posição no dicionário.
 **/
-int df_insert(dicionario** head, char x[1000], long f) {
+int df_insert(dicionario** head, char x[10000], long f) {
     dicionario** apoio = head;
 
     while (*apoio != NULL) {
@@ -64,7 +64,7 @@ int df_insert(dicionario** head, char x[1000], long f) {
 
 /*Imprime a palavra x e sua frequência. Se não houver a 
 palavra no dicionário, imprime uma mensagem de erro.*/
-int df_search(dicionario* head, char x[1000]) {
+int df_search(dicionario* head, char x[10000]) {
     dicionario* suporte = head;
 
     while (suporte != NULL) {
@@ -87,83 +87,73 @@ int df_search(dicionario* head, char x[1000]) {
 }
 
 /*
-Dados dois vetores V e U (V com as palavras e U com
-as frequências) ordena-os da maior para a menor
-frequência, levando em conta que informações que
-originalmente estavam em índices iguais nos dois vetores
-devem permanecer em índices iguais.
+Devolve quantas palavras tem no dicionário
 */
-void ordenar_matriz(char* V[], int U[], int n){
-    for (int i = 1; i < n; i++) {
-        char* palavra_atual = V[i];
-        int freq_atual = U[i];
-        int j = i - 1;
-
-        while (j >= 0 && U[j] < freq_atual) {
-            V[j + 1] = V[j];
-            U[j + 1] = U[j];
-            j--;
-        }
-        V[j + 1] = palavra_atual;
-        U[j + 1] = freq_atual;
-    }
+int contar(dicionario* d) {
+    return d == NULL ? 0 : 1 + contar(d->left) + contar(d->right);
 }
 
 /*
-Percorre a árvore e armazena em V (palavras) e U (frequências),
-nos mesmos índices, todas as palavras com o prefixo x.
+Apoio para o qsort
 */
-void apoio_complete(dicionario* head, char x[1000], char* V[], int U[], int* controle){
+int comparar(const void* a, const void* b) {
+    const dicionario* p = *(dicionario* const*)a;
+    const dicionario* q = *(dicionario* const*)b;
+
+    if (p->frequencia != q->frequencia){
+        return (p->frequencia < q->frequencia) ? 1 : -1;
+    }
+
+    return strcmp(p->palavra, q->palavra);
+}
+
+/*
+Percorre a árvore e armazena em V os structs dicionário cuja palavra
+tem o prefixo x que está sendo procurado.
+*/
+void apoio_complete(dicionario* head, char x[10000], dicionario* V[], int* controle) {
     if (head == NULL) return;
 
     int cmp = strncmp(x, head->palavra, strlen(x));
 
     if (cmp == 0) {
-        apoio_complete(head->left, x, V, U, controle);
-        if (*controle < 1000) {
-            U[*controle] = head->frequencia;
-            V[*controle] = head->palavra;
-            (*controle)++;
-        }
-        apoio_complete(head->right, x, V, U, controle);
+        apoio_complete(head->left, x, V, controle);
+        V[(*controle)++] = head;
+        apoio_complete(head->right, x, V, controle);
     }
-    else if (cmp > 0) {
-        apoio_complete(head->right, x, V, U, controle);
-    }
-    else {
-        apoio_complete(head->left, x, V, U, controle);
-    }
+    else if (cmp > 0) apoio_complete(head->right, x, V, controle);
+    else apoio_complete(head->left, x, V, controle);
 }
 
 /*
 Primeiro, procura todas as palavras no dicionário com o
-prefixo x e as armazena em um vetor V, nos mesmos 
-índices em que suas frequências serão armazenadas em U. 
-Depois, usa a função ordenar_matriz para colocá-los na
+prefixo x e armazena as structs que as contén em um vetor 
+V. Depois, usa qsort para colocá-los na
 ordem em que deverão ser impressos e, por fim, imprime a
 saída.
 */
-int df_autocomplete(dicionario* head, char x[1000], long k){
-    char* V[1000];
-    int U[1000];
+int df_autocomplete(dicionario* head, char x[10000], long k) {
+    int total = contar(head);               
+    dicionario** V = malloc((total > 0 ? total : 1) * sizeof(dicionario*));
     int controle = 0;
 
-    apoio_complete(head, x, V, U, &controle);
+    apoio_complete(head, x, V, &controle);
 
     if (controle > 0) {
-        ordenar_matriz(V, U, controle);
-        for (int i = 0; i < controle && i < k; i++) {
-            printf("(%s,%d) ", V[i], U[i]);
-        }
+        qsort(V, controle, sizeof(dicionario*), comparar);
+        for (int i = 0; i < controle && i < k; i++)
+            printf("(%s,%ld) ", V[i]->palavra, V[i]->frequencia);
         printf("\n");
+        free(V);
         return 1;
     }
 
     printf("nothing for %s.\n", x);
+    free(V);
     return 0;
 }
 
-int df_delete(dicionario** head, char x[1000]){
+int df_delete(dicionario** head, char x[10000]){
     dicionario** suporte = head;
 
     while (*suporte != NULL) {
