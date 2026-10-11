@@ -10,6 +10,7 @@
 /**
 Coloca uma nova folha na árvore.
 **/
+/*
 dicionario* df_alloc(char palavra[], long frequencia) {
     dicionario* D = (dicionario*)malloc(sizeof(dicionario));
     if(D == NULL){
@@ -24,6 +25,7 @@ dicionario* df_alloc(char palavra[], long frequencia) {
 
     return D;
 }
+*/
 
 
 
@@ -31,7 +33,16 @@ dicionario* df_alloc(char palavra[], long frequencia) {
 Libera a memória alocada dinamicamente para o dicionário.
 **/
 void df_free(dicionario* D){
-    free(D->palavra);
+    if (D == NULL){
+        return;
+    }
+
+    df_free(D->left);
+    df_free(D->right);
+
+    if (D->palavra != NULL){
+        free(D->palavra);
+    }
     free(D);
 }
 
@@ -180,5 +191,10 @@ int df_delete(dicionario* head, char x[1000]){
 /*Imprime as palavras no dicionário em ordem lexicográfica, 
 em uma única linha.*/
 void df_print(dicionario* head){
-    // BUSCA IN-ORDER (BAIXO PARA CIMA, ESQUERDA PARA DIREITA)
+    dicionario* suporte = head;
+    while(suporte->palavra!=NULL){
+        df_print(suporte->left);
+        printf("(%s, %d) ", &suporte->palavra, &suporte->frequencia);
+        df_print(suporte->right);
+    }
 }

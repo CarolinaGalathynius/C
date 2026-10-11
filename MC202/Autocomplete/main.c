@@ -8,72 +8,40 @@
 
 int main(void) {
 
-  char cmd[13];
-  float f;
-  int i, st = 1;
-  dequef* D = NULL;
+  char cmd[13], x[1000];
+  long f;
+  int i;
+  dicionario* head = NULL;
 
   while (1) {
-    if (scanf("%s",cmd) != 1) exit(1);
+    scanf("%s ", &cmd);
 
     if (strcmp(cmd,"INSERT") == 0) {
-      if (scanf("%i %f",&i,&f) != 2) exit(1);
-
-      if (D != NULL)
-        df_free(D);
-
-      D = df_alloc(i,f);
-      if (!D) {
-        printf("Unable to create a dequef.\n");
-        return errno ? errno : 1;
-      }
+      if (scanf("%s %d",&x,&f) != 2) exit(1);
+      df_insert(head, x[1000], f); 
     }
 
     else if (strcmp(cmd,"SEARCH") == 0) {
-      if (scanf("%f",&f) != 1) exit(1);
-      st = df_push(D,f);
+      if (scanf("%s",&x) != 1) exit(1);
+      df_search(head, x);
     }
 
     else if (strcmp(cmd,"AUTOCOMPLETE") == 0) {
-      if (df_size(D) > 0)
-        f = df_pop(D);
+      if (scanf("%s %d",&x, &f) != 2) exit(1);
+      i = df_autocomplete(head, x, f);
     }
 
     else if (strcmp(cmd,"DELETE") == 0) {
-      if (scanf("%f",&f) != 1) exit(1);
-      st = df_inject(D,f);
+      if (scanf("%s",&x) != 1) exit(1);
+      i = df_delete(head,x);
     }
 
     else if (strcmp(cmd,"PRINT") == 0) {
-      if (df_size(D) > 0)
-        f = df_eject(D);
+      if (scanf("%s",&x) != 1) exit(1);
+      df_print(head);
     }
-
-    else if (strcmp(cmd,"set") == 0) {
-      if (scanf("%i %f",&i,&f) != 2) exit(1);
-      if (i >= 0 && i < df_size(D))
-        df_set(D,i,f);
-    }
-
-    else if (strcmp(cmd,"get") == 0) {
-      if (scanf("%i",&i) != 1) exit(1);
-      if (i >= 0 && i < df_size(D))
-        printf("D[%d] == %.1f\n",i,df_get(D,i));
-    }
-
-    else if (strcmp(cmd,"is-empty?") == 0) {
-      if (df_size(D) == 0)
-        printf("empty\n");
-      else
-        printf("not empty\n");
-    }
-
-    else if (strcmp(cmd,"print") == 0) {
-      df_print(D);
-    }
-
     else if (strcmp(cmd,"EXIT") == 0) {
-      df_free(D);
+      df_free(head);
       return 0;
     }
   }
