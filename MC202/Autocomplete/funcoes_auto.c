@@ -125,20 +125,60 @@ Depois, usa a função ordenar_matriz para colocá-los na
 ordem em que deverão ser impressos e, por fim, imprime a
 saída.
 */
-void df_autocomplete(dicionario* D, char x[1000], long k){
+int df_autocomplete(dicionario* head, char x[1000], long k){
+    // TERMINAR
+    dicionario* suporte = head;
+    char V[1000];
+    int U[1000];
 
+    while (suporte != NULL) {
+        int cmp = strcmp(x, suporte->palavra);
+
+        if (cmp == 0) {
+            printf("%s %d\n", x, suporte->frequencia);
+            return 1;
+        }
+        else if (cmp > 0) {
+            suporte = suporte->right;
+        }
+        else {
+            suporte = suporte->left;
+        }
+    }
+
+    printf("nothing for %s.\n", x);
+    return 0;
 }
 
 /*
 Remover a palavra x do dicionário. Se x não estiver no 
 dicionário então o programa não faz nada.
 */
-int df_delete(dicionario* D, char x[1000]){
+int df_delete(dicionario* head, char x[1000]){
+    dicionario* suporte = head;
+    dicionario* suporte_atras = head;
 
+    while (suporte != NULL) {
+        int cmp = strcmp(x, suporte->palavra);
+
+        if (cmp == 0) {
+            // COLOCAR AQUI A REMOÇÃO
+            return 1;
+        }
+        else if (cmp > 0) {
+            suporte_atras = suporte;
+            suporte = suporte->right;
+        }
+        else {
+            suporte_atras = suporte;
+            suporte = suporte->left;
+        }
+    }
+    return 0;
 }
 
 /*Imprime as palavras no dicionário em ordem lexicográfica, 
 em uma única linha.*/
-void df_print(dicionario* D){
-
+void df_print(dicionario* head){
+    // BUSCA IN-ORDER (BAIXO PARA CIMA, ESQUERDA PARA DIREITA)
 }
