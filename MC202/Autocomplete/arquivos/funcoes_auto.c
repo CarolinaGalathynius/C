@@ -25,41 +25,115 @@ void df_free(dicionario* D){
     free(D);
 }
 
+/*
+Obtém a altura de um nó. Usada para evitar receber NULL
+ao tentar acessar diretamente a altura de um nó.
+*/
+int altura(dicionario* palavra) {
+    return palavra == NULL ? 0 : palavra->altura;
+}
+
+/*
+Para facilitar a leitura quando for determinar o
+máximo entre dois números.
+*/
+int max(int a, int b) {
+    return a > b ? a : b;
+}
+
+/*
+Atualizando a altura de um nó
+*/
+void atualizar(dicionario* palavra) {
+    palavra->altura = 1 + max(altura(palavra->left), altura(palavra->right));
+}
+
+/*
+Calcula o fator de desbalanceamento de um nó
+*/
+int fator(dicionario* palavra) {
+    return altura(palavra->left) - altura(palavra->right);
+}
+
+/*
+Rotações para a esquerda
+*/
+dicionario* rot_esq(dicionario* palavra1){
+    dicionario* palavra2 = palavra1->right;
+    palavra1->right = palavra2->left;
+    palavra2->left = palavra1;
+    atualizar(palavra1);  
+    atualizar(palavra2);
+    return palavra2;
+}
+
+/*
+Rotações para a direita
+*/
+dicionario* rot_dir(dicionario* palavra1){
+    dicionario* palavra2 = palavra1->left;
+    palavra1->left = palavra2->right;
+    palavra2->right = palavra1;
+    atualizar(palavra1);  
+    atualizar(palavra2);
+    return palavra2;
+}
+
+/*
+Balanceia o dicionário
+*/
+dicionario* balancear(dicionario* no) {
+    atualizar(no);
+    int f = fator(no);
+
+    if (f > 1) {                          
+        if (fator(no->left) < 0)          
+            no->left = rot_esq(no->left);
+        return rot_dir(no);
+    }
+
+    if (f < -1) {                       
+        if (fator(no->right) > 0)        
+            no->right = rot_dir(no->right);
+        return rot_esq(no);
+    }
+
+    return no;                         
+}
 
 /**
-    Adiciona a palavra w com frequência f a sua devida posição no dicionário.
+Adiciona a palavra w com frequência f a sua devida posição no dicionário.
 **/
 int df_insert(dicionario** head, char x[10000], long f) {
-    dicionario** apoio = head;
-
-    while (*apoio != NULL) {
-        int cmp = strcmp(x, (*apoio)->palavra);
-
-        if (cmp == 0) {
-            (*apoio)->frequencia = f;
-            return 1;
+    if (*head == NULL) {
+        dicionario* novo = malloc(sizeof(dicionario));
+        if (novo == NULL) return 0;
+        novo->palavra = malloc(strlen(x) + 1);
+        if (novo->palavra == NULL) {
+            free(novo);
+            return 0;
         }
-        else if (cmp > 0) {
-            apoio = &(*apoio)->right;
-        }
-        else {
-            apoio = &(*apoio)->left;
-        }
+        strcpy(novo->palavra, x);
+        novo->frequencia = f;
+        novo->left = NULL;
+        novo->right = NULL;
+        novo->altura = 1;
+        *head = novo;
+        return 1;
     }
 
-    dicionario* novo = malloc(sizeof(dicionario));
-    if (novo == NULL) return 0;
-    novo->palavra = malloc(strlen(x) + 1);
-    if (novo->palavra == NULL) {
-        free(novo);
-        return 0;
+    int cmp = strcmp(x, (*head)->palavra);
+    if (cmp == 0) {
+        (*head)->frequencia = f;
+        return 1;
     }
-    strcpy(novo->palavra, x);
-    novo->frequencia = f;
-    novo->right = NULL;
-    novo->left = NULL;
-    *apoio = novo;
-    return 1;
+
+    int r;
+    if (cmp < 0) r = df_insert(&(*head)->left, x, f);
+    else         r = df_insert(&(*head)->right, x, f);
+
+    *head = balancear(*head);
+    return r;
 }
 
 /*Imprime a palavra x e sua frequência. Se não houver a 
@@ -87,38 +161,31 @@ int df_search(dicionario* head, char x[10000]) {
 }
 
 /*
-Devolve quantas palavras tem no dicionário
-*/
-int contar(dicionario* d) {
-    return d == NULL ? 0 : 1 + contar(d->left) + contar(d->right);
-}
-
-/*
 Apoio para o qsort
 */
 int comparar(const void* a, const void* b) {
-    const dicionario* p = *(dicionario* const*)a;
-    const dicionario* q = *(dicionario* const*)b;
+    const dicionario* x = *(dicionario* const*) a;
+    const dicionario* y = *(dicionario* const*) b;
 
-    if (p->frequencia != q->frequencia){
-        return (p->frequencia < q->frequencia) ? 1 : -1;
+    if (x->frequencia != y->frequencia) {
+        return (y->frequencia > x->frequencia) - (y->frequencia < x->frequencia);
     }
-
-    return strcmp(p->palavra, q->palavra);
+    return strcmp(x->palavra, y->palavra);
 }
 
 /*
 Percorre a árvore e armazena em V os structs dicionário cuja palavra
 tem o prefixo x que está sendo procurado.
 */
-void apoio_complete(dicionario* head, char x[10000], dicionario* V[], int* controle) {
+void apoio_complete(dicionario* head, char* x, dicionario** V, int* controle) {
     if (head == NULL) return;
 
     int cmp = strncmp(x, head->palavra, strlen(x));
 
     if (cmp == 0) {
         apoio_complete(head->left, x, V, controle);
-        V[(*controle)++] = head;
+        if (V != NULL) V[*controle] = head;
+        (*controle)++;
         apoio_complete(head->right, x, V, controle);
     }
     else if (cmp > 0) apoio_complete(head->right, x, V, controle);
@@ -133,60 +200,66 @@ ordem em que deverão ser impressos e, por fim, imprime a
 saída.
 */
 int df_autocomplete(dicionario* head, char x[10000], long k) {
-    int total = contar(head);               
-    dicionario** V = malloc((total > 0 ? total : 1) * sizeof(dicionario*));
-    int controle = 0;
+    int n = 0;
+    apoio_complete(head, x, NULL, &n);
 
-    apoio_complete(head, x, V, &controle);
-
-    if (controle > 0) {
-        qsort(V, controle, sizeof(dicionario*), comparar);
-        for (int i = 0; i < controle && i < k; i++)
-            printf("(%s,%ld) ", V[i]->palavra, V[i]->frequencia);
-        printf("\n");
-        free(V);
-        return 1;
+    if (n == 0) {
+        printf("nothing for %s.\n", x);
+        return 0;
     }
 
-    printf("nothing for %s.\n", x);
+    dicionario** V = malloc(n * sizeof(dicionario*));
+    if (V == NULL) return 0;
+
+    n = 0;
+    apoio_complete(head, x, V, &n);
+
+    qsort(V, n, sizeof(dicionario*), comparar);
+    for (int i = 0; i < n && i < k; i++)
+        printf("(%s,%ld) ", V[i]->palavra, V[i]->frequencia);
+    printf("\n");
+
     free(V);
-    return 0;
+    return 1;
 }
 
-int df_delete(dicionario** head, char x[10000]){
-    dicionario** suporte = head;
+int df_delete(dicionario** head, char x[10000]) {
+    if (*head == NULL) return 0;
 
-    while (*suporte != NULL) {
-        int cmp = strcmp(x, (*suporte)->palavra);
+    dicionario* apoio = *head;
+    int cmp = strcmp(x, apoio->palavra);
+    int r;
 
-        if (cmp == 0) {
-            dicionario* removido = *suporte;
-            dicionario* substituto;
-
-            if (removido->right == NULL) {
-                substituto = removido->left;
-            } else {
-                substituto = removido->right;
-                dicionario* suporte_extra = substituto;
-                while (suporte_extra->left != NULL) {
-                    suporte_extra = suporte_extra->left;
-                }
-                suporte_extra->left = removido->left;
-            }
-
-            *suporte = substituto;
-            free(removido->palavra);
-            free(removido);
-            return 1;
-        }
-        else if (cmp > 0) {
-            suporte = &(*suporte)->right;
-        }
-        else {
-            suporte = &(*suporte)->left;
-        }
+    if (cmp < 0) {
+        r = df_delete(&apoio->left, x);
     }
-    return 0;
+    else if (cmp > 0) {
+        r = df_delete(&apoio->right, x);
+    }
+    else if (apoio->left == NULL || apoio->right == NULL) {
+        *head = (apoio->left != NULL) ? apoio->left : apoio->right;
+        free(apoio->palavra);
+        free(apoio);
+        return 1;
+    }
+    else {
+        dicionario* suc = apoio->right;
+        while (suc->left != NULL) suc = suc->left;
+
+        char* copia = malloc(strlen(suc->palavra) + 1);
+        if (copia == NULL) return 0;
+        strcpy(copia, suc->palavra);
+        long freq = suc->frequencia;
+
+        r = df_delete(&apoio->right, copia);
+
+        free(apoio->palavra);
+        apoio->palavra = copia;
+        apoio->frequencia = freq;
+    }
+
+    *head = balancear(*head);
+    return r;
 }
 
 /*Imprime as palavras no dicionário em ordem lexicográfica, 

@@ -9,7 +9,8 @@
 
 typedef struct dicionario{
     char *palavra;  
-    long frequencia;  
+    long frequencia; 
+    int altura; 
     struct dicionario* left; 
     struct dicionario* right; 
 } dicionario;
